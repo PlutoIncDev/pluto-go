@@ -1,2 +1,2 @@
-# pluto-go
-Pluto Go: Microservice Framework in Golanmg
+# Pluto Go
+Pluto Go: Microservice Framework in Golang
