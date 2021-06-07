@@ -3,6 +3,7 @@ package pluto
 import (
 	"fmt"
 	"log"
+	"pluto/pkgs/providers"
 	"pluto/pkgs/providers/base"
 	"sync"
 )
@@ -37,7 +38,7 @@ func (c *Client) Start() {
 
 	for _, p := range c.providers {
 		wg.Add(1)
-		go base.RunProvider(&wg, p)
+		go providers.RunProvider(&wg, p)
 	}
 
 	wg.Wait()
