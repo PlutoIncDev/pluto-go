@@ -1,2 +1,2 @@
 # Pluto Go
-Pluto Go: Microservice Framework in Golang
+Microservice Framework written for Golang. This is meant to offer a similar experience 

@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-func startAMQPConnection(wg *sync.WaitGroup, c *Client) {
+func startRpcConnection(wg *sync.WaitGroup, c *Client) {
 	defer wg.Done()
 
 	handlers := c.Events.Rpc.GetHandlers()

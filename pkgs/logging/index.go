@@ -48,3 +48,11 @@ func Error(v ...interface{}) {
 func Fatal(v ...interface{}) {
 	log.Fatalln("[FATAL]:", v)
 }
+
+func Panic(v ...interface{}) {
+	log.Println("[PANIC]:", v)
+
+	if len(v) > 0 {
+		panic(v[0])
+	}
+}

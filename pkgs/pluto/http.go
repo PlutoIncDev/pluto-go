@@ -18,7 +18,6 @@ func startHttpServer(wg *sync.WaitGroup, c *Client) {
 
 	logging.Info("Starting the HTTP Server with", len(handlers), "handlers")
 
-
 	for _, handler := range c.Events.Http.GetHandlers() {
 		logging.Debug("Registering", handler.Method, "HTTP Method for path", handler.Path)
 
