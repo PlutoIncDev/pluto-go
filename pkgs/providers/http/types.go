@@ -1,6 +1,8 @@
 package http
 
-import "pluto/pkgs/internal/httpserver"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 type endpointHandler func(ctx *Context)
 
@@ -13,7 +15,7 @@ type endpoint struct {
 type Provider struct {
 	port      string
 	endpoints []*endpoint
-	server    *httpserver.HTTPServer
+	server    *gin.Engine
 }
 
 type Method string
@@ -27,7 +29,7 @@ const (
 )
 
 type Context struct {
+	HTTP *gin.Context
 }
 
-type Headers struct {
-}
+type H gin.H

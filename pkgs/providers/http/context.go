@@ -1,5 +1,11 @@
 package http
 
-func NewContext() *Context {
-	return &Context{}
+import (
+	"github.com/gin-gonic/gin"
+)
+
+func NewContext(ctx *gin.Context) *Context {
+	return &Context{
+		HTTP: ctx,
+	}
 }

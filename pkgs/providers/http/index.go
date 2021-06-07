@@ -2,8 +2,8 @@ package http
 
 import (
 	"fmt"
-	"net/http"
-	"pluto/pkgs/internal/httpserver"
+	"github.com/gin-gonic/gin"
+	"log"
 )
 
 func NewProvider(port string) *Provider {
@@ -14,20 +14,30 @@ func NewProvider(port string) *Provider {
 
 func (p *Provider) Setup() {
 	// TODO: Setup the HTTP server
-	p.server = httpserver.NewHTTPServer(p.port)
+	log.Println(fmt.Sprintf("Starting HTTP Server on port=%s", p.port))
+
+	gin.SetMode(gin.ReleaseMode)
+	engine := gin.New()
+	p.server = engine
+
+	// todo: middleware
+	// todo: logger middleware
 
 	// register all the endpoints with the server
 	for _, e := range p.endpoints {
-		p.server.RegisterHandlerFunc(string(e.method), e.path, func(writer http.ResponseWriter, request *http.Request) {
-			// todo: middleware?
-			e.handler(NewContext())
+		// TODO: test that this loop variable capture issue is fixed!
+		endpoint := e // loop variable capture issue if we dont copy e into endpoint
+
+		log.Println(fmt.Sprintf("Registering [%s] %s to HTTP Provider", endpoint.method, endpoint.path))
+		p.server.Handle(string(endpoint.method), endpoint.path, func(ctx *gin.Context) {
+			endpoint.handler(NewContext(ctx))
 		})
 	}
 }
 
 func (p *Provider) Run() {
 	// todo: Run HTTP Server
-	_ = p.server.Run()
+	_ = p.server.Run(fmt.Sprintf(":%s", p.port))
 }
 
 func (p *Provider) Shutdown() {
@@ -44,6 +54,7 @@ func (p *Provider) RegisterEndpoint(method Method, path string, handler endpoint
 
 	e := NewEndpoint(method, path, handler)
 	p.endpoints = append(p.endpoints, e)
+	log.Println(p.endpoints)
 }
 
 func (p *Provider) GetEndpoints() []*endpoint {

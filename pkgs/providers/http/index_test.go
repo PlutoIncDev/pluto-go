@@ -52,5 +52,4 @@ func (s *ProvidersHttpIndexUnitTestSuite) Test_GetEndpoints() {
 	s.Equal("/health-check", e[0].GetPath())
 	s.Equal(http.PostMethod, e[1].GetMethod())
 	s.Equal("/user/auth", e[1].GetPath())
-
 }
