@@ -2,6 +2,7 @@ package http_test
 
 import (
 	"github.com/stretchr/testify/suite"
+	"pluto/pkgs/pluto"
 	"pluto/pkgs/providers/http"
 	"testing"
 )
@@ -52,4 +53,27 @@ func (s *ProvidersHttpIndexUnitTestSuite) Test_GetEndpoints() {
 	s.Equal("/health-check", e[0].GetPath())
 	s.Equal(http.PostMethod, e[1].GetMethod())
 	s.Equal("/user/auth", e[1].GetPath())
+}
+
+func (s *ProvidersHttpIndexUnitTestSuite) Test_Provider_Success() {
+	// Tests that we can register the HTTP Provider and we can reach the endpoints provided
+	client := pluto.NewClient("test")
+
+	httpProvider := http.NewProvider("8080")
+
+	//healthCheckCalled := false
+	httpProvider.RegisterEndpoint(http.GetMethod, "/health-check", func(ctx *http.Context) {
+		//healthCheckCalled = true
+	})
+
+	//usersCalled := false
+	httpProvider.RegisterEndpoint(http.GetMethod, "/users", func(ctx *http.Context) {
+		//usersCalled = true
+	})
+
+	client.RegisterProvider(httpProvider)
+	client.Start(true)
+
+
+	client.Stop()
 }

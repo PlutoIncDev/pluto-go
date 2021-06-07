@@ -52,7 +52,7 @@ func (s *PlutoClientUnitTestSuite) Test_Client_RegisterProvider() {
 
 func (s *PlutoClientUnitTestSuite) Test_Client_ProviderLifeCycle() {
 	// Tests that the client can be started and the provider life cycle is correct
-
+	// todo: clean up?
 	c := pluto.NewClient("test")
 
 	testProvider := test.NewProvider()
@@ -62,7 +62,7 @@ func (s *PlutoClientUnitTestSuite) Test_Client_ProviderLifeCycle() {
 
 	c.RegisterProvider(testProvider)
 
-	c.Start()
+	c.Start(false)
 
 	testProvider.AssertNumberOfCalls(s.T(), "Setup", 1)
 	testProvider.AssertNumberOfCalls(s.T(), "Run", 1)

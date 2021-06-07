@@ -55,11 +55,14 @@ func (p *Provider) RegisterEndpoint(method Method, path string, handler endpoint
 
 	e := NewEndpoint(method, path, handler)
 	p.endpoints = append(p.endpoints, e)
-	log.Println(p.endpoints)
 }
 
 func (p *Provider) GetEndpoints() []*endpoint {
 	return p.endpoints
 }
+
+//func (p *Provider) ServerHTTP(w http.ResponseWriter, req *http.Request) {
+//	p.server.ServeHTTP(w, req)
+//}
 
 // TODO: add middleware?
