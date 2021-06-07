@@ -33,9 +33,8 @@ func (p *Provider) Shutdown() {
 	log.Println("HTTP Provider is Shutting Down")
 }
 
-func (p *Provider) RegisterEndpoint(method string, path string, handler func()) {
+func (p *Provider) RegisterEndpoint(method Method, path string, handler func()) {
 	// check if the endpoint is already registered
-
 	for _, e := range p.endpoints {
 		if e.path == path && e.method == method {
 			panic(fmt.Sprintf("Endpoint with method %s and path %s should only be registered once", method, path))

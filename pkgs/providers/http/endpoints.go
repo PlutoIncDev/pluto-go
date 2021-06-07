@@ -3,12 +3,12 @@ package http
 type endpointHandler func()
 
 type endpoint struct {
-	method string
+	method Method
 	path string
 	handler endpointHandler
 }
 
-func NewEndpoint(method string, path string, handler endpointHandler) *endpoint {
+func NewEndpoint(method Method, path string, handler endpointHandler) *endpoint {
 	return &endpoint{
 		method:  method,
 		path:    path,
@@ -20,6 +20,6 @@ func (e *endpoint) GetPath() string {
 	return e.path
 }
 
-func (e *endpoint) GetMethod() string {
+func (e *endpoint) GetMethod() Method {
 	return e.method
 }
