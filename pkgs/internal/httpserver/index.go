@@ -12,12 +12,12 @@ type HTTPServer struct {
 
 func NewHTTPServer() *HTTPServer {
 	router := mux.NewRouter()
-	
+
 	return &HTTPServer{
 		router: router,
 		server: &http.Server{
 			Handler: router,
-			Addr: "127.0.0.1:8000", // todo: port
+			Addr:    "127.0.0.1:8000", // todo: port
 
 			// todo: TIMEOUTS
 		},

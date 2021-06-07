@@ -9,7 +9,7 @@ import (
 )
 
 type Client struct {
-	name string
+	name      string
 	providers []base.Provider
 }
 

@@ -68,4 +68,3 @@ func (s *PlutoClientUnitTestSuite) Test_Client_ProviderLifeCycle() {
 	testProvider.AssertNumberOfCalls(s.T(), "Run", 1)
 	testProvider.AssertNumberOfCalls(s.T(), "Shutdown", 1)
 }
-

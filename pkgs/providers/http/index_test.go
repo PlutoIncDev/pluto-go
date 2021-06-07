@@ -38,7 +38,6 @@ func (s *ProvidersHttpIndexUnitTestSuite) Test_RegisterEndpoint_Duplicate_Failur
 	})
 }
 
-
 func (s *ProvidersHttpIndexUnitTestSuite) Test_GetEndpoints() {
 	// Tests that the GetEndpoints function returns the correct endpoints
 	httpProvider := http.NewProvider("8080")
