@@ -1,6 +1,7 @@
 package httpserver
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -10,14 +11,14 @@ type HTTPServer struct {
 	server *http.Server
 }
 
-func NewHTTPServer() *HTTPServer {
+func NewHTTPServer(port string) *HTTPServer {
 	router := mux.NewRouter()
 
 	return &HTTPServer{
 		router: router,
 		server: &http.Server{
 			Handler: router,
-			Addr:    "127.0.0.1:8000", // todo: port
+			Addr:    fmt.Sprintf("127.0.0.1:%s", port), // todo: port
 
 			// todo: TIMEOUTS
 		},
@@ -30,6 +31,6 @@ func (h *HTTPServer) RegisterHandlerFunc(method string, path string, handler fun
 	}).Methods(method)
 }
 
-func (h *HTTPServer) Start() error {
+func (h *HTTPServer) Run() error {
 	return h.server.ListenAndServe()
 }

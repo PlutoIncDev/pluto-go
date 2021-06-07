@@ -14,11 +14,12 @@ func NewProvider(port string) *Provider {
 
 func (p *Provider) Setup() {
 	// TODO: Setup the HTTP server
-	p.server = httpserver.NewHTTPServer()
+	p.server = httpserver.NewHTTPServer(p.port)
 
 	// register all the endpoints with the server
 	for _, e := range p.endpoints {
 		p.server.RegisterHandlerFunc(string(e.method), e.path, func(writer http.ResponseWriter, request *http.Request) {
+			// todo: middleware?
 			e.handler(NewContext())
 		})
 	}
@@ -26,7 +27,7 @@ func (p *Provider) Setup() {
 
 func (p *Provider) Run() {
 	// todo: Run HTTP Server
-	_ = p.server.Start()
+	_ = p.server.Run()
 }
 
 func (p *Provider) Shutdown() {

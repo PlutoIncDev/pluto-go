@@ -18,7 +18,7 @@ func (s *ProvidersHttpIndexUnitTestSuite) Test_RegisterEndpoint_Success() {
 	// Tests that RegisterEndpoint function is successful
 	httpProvider := http.NewProvider("8080")
 
-	httpProvider.RegisterEndpoint(http.GetMethod, "/health-check", func() {})
+	httpProvider.RegisterEndpoint(http.GetMethod, "/health-check", func(ctx *http.Context) {})
 
 	e := httpProvider.GetEndpoints()
 
@@ -31,10 +31,10 @@ func (s *ProvidersHttpIndexUnitTestSuite) Test_RegisterEndpoint_Duplicate_Failur
 	// Tests that RegisterEndpoint function fails if an existing endpoint already exists
 	httpProvider := http.NewProvider("8080")
 
-	httpProvider.RegisterEndpoint(http.GetMethod, "/health-check", func() {})
+	httpProvider.RegisterEndpoint(http.GetMethod, "/health-check", func(ctx *http.Context) {})
 
 	s.Panics(func() {
-		httpProvider.RegisterEndpoint(http.GetMethod, "/health-check", func() {})
+		httpProvider.RegisterEndpoint(http.GetMethod, "/health-check", func(ctx *http.Context) {})
 	})
 }
 
@@ -42,8 +42,8 @@ func (s *ProvidersHttpIndexUnitTestSuite) Test_GetEndpoints() {
 	// Tests that the GetEndpoints function returns the correct endpoints
 	httpProvider := http.NewProvider("8080")
 
-	httpProvider.RegisterEndpoint(http.GetMethod, "/health-check", func() {})
-	httpProvider.RegisterEndpoint(http.PostMethod, "/user/auth", func() {})
+	httpProvider.RegisterEndpoint(http.GetMethod, "/health-check", func(ctx *http.Context) {})
+	httpProvider.RegisterEndpoint(http.PostMethod, "/user/auth", func(ctx *http.Context) {})
 
 	e := httpProvider.GetEndpoints()
 	s.Equal(2, len(e))
