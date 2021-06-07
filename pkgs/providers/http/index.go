@@ -3,12 +3,10 @@ package http
 import (
 	"fmt"
 	"log"
-	"pluto/pkgs/internal/http"
 )
 
 type Provider struct {
 	port string
-	server *http.Server
 	endpoints []*endpoint
 }
 
@@ -21,16 +19,19 @@ func NewProvider(port string) *Provider {
 func (p *Provider) Setup() {
 	log.Println("HTTP Provider is Setting Up")
 
-	// Setup the HTTP server
-	p.server = http.NewServer()
+	// TODO: Setup the HTTP server
 }
 
 func (p *Provider) Run() {
 	log.Println(fmt.Sprintf("HTTP Server is Running on localhost:%s", p.port))
+
+	// TODO: Run the HTTP server
 }
 
 func (p *Provider) Shutdown() {
 	log.Println("HTTP Provider is Shutting Down")
+
+	// TODO: Shutdown the HTTP Server
 }
 
 func (p *Provider) RegisterEndpoint(method Method, path string, handler func()) {
@@ -48,3 +49,5 @@ func (p *Provider) RegisterEndpoint(method Method, path string, handler func()) 
 func (p *Provider) GetEndpoints() []*endpoint {
 	return p.endpoints
 }
+
+// TODO: add middleware?
