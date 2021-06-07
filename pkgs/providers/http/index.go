@@ -3,6 +3,7 @@ package http
 import (
 	"fmt"
 	"log"
+	"time"
 )
 
 type Provider struct {
@@ -26,6 +27,10 @@ func (p *Provider) Run() {
 	log.Println(fmt.Sprintf("HTTP Server is Running on localhost:%s", p.port))
 
 	// TODO: Run the HTTP server
+	for i := 0; i < 6; i++ {
+		time.Sleep(time.Second)
+		log.Println("Im running!")
+	}
 }
 
 func (p *Provider) Shutdown() {
