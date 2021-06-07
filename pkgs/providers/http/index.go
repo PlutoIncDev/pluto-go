@@ -2,14 +2,9 @@ package http
 
 import (
 	"fmt"
-	"log"
-	"time"
+	"net/http"
+	"pluto/pkgs/internal/httpserver"
 )
-
-type Provider struct {
-	port string
-	endpoints []*endpoint
-}
 
 func NewProvider(port string) *Provider {
 	return &Provider{
@@ -18,28 +13,27 @@ func NewProvider(port string) *Provider {
 }
 
 func (p *Provider) Setup() {
-	log.Println("HTTP Provider is Setting Up")
-
 	// TODO: Setup the HTTP server
-}
+	p.server = httpserver.NewHTTPServer()
 
-func (p *Provider) Run() {
-	log.Println(fmt.Sprintf("HTTP Server is Running on localhost:%s", p.port))
-
-	// TODO: Run the HTTP server
-	for i := 0; i < 6; i++ {
-		time.Sleep(time.Second)
-		log.Println("Im running!")
+	// register all the endpoints with the server
+	for _, e := range p.endpoints {
+		p.server.RegisterHandlerFunc(string(e.method), e.path, func(writer http.ResponseWriter, request *http.Request) {
+			e.handler(NewContext())
+		})
 	}
 }
 
-func (p *Provider) Shutdown() {
-	log.Println("HTTP Provider is Shutting Down")
+func (p *Provider) Run() {
+	// todo: Run HTTP Server
+	_ = p.server.Start()
+}
 
+func (p *Provider) Shutdown() {
 	// TODO: Shutdown the HTTP Server
 }
 
-func (p *Provider) RegisterEndpoint(method Method, path string, handler func()) {
+func (p *Provider) RegisterEndpoint(method Method, path string, handler endpointHandler) {
 	// check if the endpoint is already registered
 	for _, e := range p.endpoints {
 		if e.path == path && e.method == method {

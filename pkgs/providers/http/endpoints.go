@@ -1,13 +1,5 @@
 package http
 
-type endpointHandler func()
-
-type endpoint struct {
-	method Method
-	path string
-	handler endpointHandler
-}
-
 func NewEndpoint(method Method, path string, handler endpointHandler) *endpoint {
 	return &endpoint{
 		method:  method,

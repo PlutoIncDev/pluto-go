@@ -14,6 +14,7 @@ type Client struct {
 }
 
 func NewClient(name string) *Client {
+	// TODO: replace name with config (and validate config)
 	if len(name) == 0 {
 		panic("Name of service must be at least 1 character long")
 	}
