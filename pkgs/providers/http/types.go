@@ -7,26 +7,18 @@ import (
 type endpointHandler func(ctx *Context)
 
 type endpoint struct {
-	method  Method
+	method  string
 	path    string
 	handler endpointHandler
 }
 
 type Provider struct {
-	port      string
+	port     string
+	finished bool
+
 	endpoints []*endpoint
 	server    *gin.Engine
 }
-
-type Method string
-
-const (
-	GetMethod     Method = "GET"
-	PostMethod    Method = "POST"
-	PatchMethod   Method = "PATCH"
-	DeleteMethod  Method = "DELETE"
-	OptionsMethod Method = "OPTIONS"
-)
 
 type Context struct {
 	HTTP *gin.Context
