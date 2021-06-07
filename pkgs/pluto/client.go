@@ -3,13 +3,13 @@ package pluto
 import (
 	"fmt"
 	"log"
-	"pluto/pkgs/providers"
+	"pluto/pkgs/providers/base"
 	"sync"
 )
 
 type Client struct {
 	name string
-	providers []providers.Provider
+	providers []base.Provider
 }
 
 func NewClient(name string) *Client {
@@ -20,13 +20,13 @@ func NewClient(name string) *Client {
 	return &Client{name: name}
 }
 
-func (c *Client) RegisterProvider(p providers.Provider) {
+func (c *Client) RegisterProvider(p base.Provider) {
 	c.providers = append(c.providers, p)
 
-	p.ISetup()
+	p.Setup()
 }
 
-func (c *Client) GetProviders() []providers.Provider {
+func (c *Client) GetProviders() []base.Provider {
 	return c.providers
 }
 
@@ -37,12 +37,12 @@ func (c *Client) Start() {
 
 	for _, p := range c.providers {
 		wg.Add(1)
-		go providers.RunProvider(&wg, p)
+		go base.RunProvider(&wg, p)
 	}
 
 	wg.Wait()
 
 	for _, p := range c.providers {
-		p.IShutdown()
+		p.Shutdown()
 	}
 }

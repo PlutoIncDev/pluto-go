@@ -3,12 +3,10 @@ package http
 import (
 	"fmt"
 	"log"
-	"pluto/pkgs/providers/base"
 	"time"
 )
 
 type Provider struct {
-	base.Provider
 	port string
 	endpoints []*endpoint
 }

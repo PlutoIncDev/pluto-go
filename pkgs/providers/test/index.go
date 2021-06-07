@@ -1,13 +1,11 @@
 package test
 
 import (
-	"github.com/stretchr/testify/mock"
 	"log"
-	"pluto/pkgs/providers/base"
+	"github.com/stretchr/testify/mock"
 )
 
 type Provider struct {
-	base.Provider
 	mock.Mock
 }
 
