@@ -2,62 +2,47 @@ package pluto
 
 import (
 	"fmt"
-	"pluto/pkgs/entrypoints"
-	"pluto/pkgs/errors"
-	"pluto/pkgs/internal"
-	"pluto/pkgs/logging"
-	"reflect"
+	"log"
+	"pluto/pkgs/providers/base"
 	"sync"
 )
 
 type Client struct {
-	Options *internal.Options
-	Events *internal.Events
-	Entrypoints []entrypoints.Entrypoint
+	name string
+	providers []base.Provider
 }
 
-func NewClient(name string) (*Client, error) {
-	opts, err := internal.NewOptions(name)
-	if err != nil {
-		return nil, err
+func NewClient(name string) *Client {
+	if len(name) == 0 {
+		panic("Name of service must be at least 1 character long")
 	}
 
-	return &Client{
-		Options: opts,
-		// todo; error handling on new events?
-		Events: internal.NewEvents(),
-	}, nil
+	return &Client{name: name}
 }
 
-func (c *Client) String() string {
-	return fmt.Sprintf("<PlutoClient name='%s'/>", c.Options.GetName())
+func (c *Client) RegisterProvider(p base.Provider) {
+	c.providers = append(c.providers, p)
+
+	p.Setup()
 }
 
-func (c *Client) RegisterEntrypoint(e entrypoints.Entrypoint) {
-	c.Entrypoints = append(c.Entrypoints, e)
-
-	e.Setup()
+func (c *Client) GetProviders() []base.Provider {
+	return c.providers
 }
 
 func (c *Client) Start() {
+	log.Println(fmt.Sprintf("Starting the %s service", c.name))
+
 	var wg sync.WaitGroup
 
-	logging.Info(fmt.Sprintf("Starting %s Service 🚀", c.Options.GetName()))
-
-	if len(c.Entrypoints) == 0 {
-		logging.Panic(errors.NewErr("Unable to start service as no entry points defined"))
-	}
-
-	for _, e := range c.Entrypoints {
-		logging.Info(fmt.Sprintf("Running Entrypoint %s", reflect.TypeOf(e)))
-
+	for _, p := range c.providers {
 		wg.Add(1)
-		go entrypoints.RunEntrypoint(&wg, e)
+		go base.RunProvider(&wg, p)
 	}
 
 	wg.Wait()
 
-	for _, e := range c.Entrypoints {
-		e.Shutdown()
+	for _, p := range c.providers {
+		p.Shutdown()
 	}
 }
