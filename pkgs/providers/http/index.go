@@ -22,6 +22,7 @@ func (p *Provider) Setup() {
 
 	// todo: middleware
 	// todo: logger middleware
+	// todo: limit https://github.com/aviddiviner/gin-limit (add default? 1,000?)
 
 	// register all the endpoints with the server
 	for _, e := range p.endpoints {
