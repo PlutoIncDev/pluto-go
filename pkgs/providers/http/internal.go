@@ -10,7 +10,7 @@ import (
 
 func (p *Provider) Setup() {
 	// TODO: Setup the HTTP server
-	log.Println(fmt.Sprintf("Starting HTTP Server on port=%s", p.port))
+	log.Println(fmt.Sprintf("Setting up HTTP Server on port=%s", p.port))
 
 	gin.SetMode(gin.ReleaseMode)
 	engine := gin.New()
@@ -33,6 +33,7 @@ func (p *Provider) Setup() {
 
 func (p *Provider) Run(ctx context.Context) {
 	// todo: handle error here? ?(panic?)
+	log.Println("Running HTTP Server")
 	_ = manners.ListenAndServe(fmt.Sprintf(":%s", p.port), p.server)
 }
 

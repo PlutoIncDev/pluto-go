@@ -40,8 +40,6 @@ func (c *Client) Start(blocking bool) {
 
 		provider := p
 		go func() {
-			provider.Setup()
-
 			go provider.Run(ctx)
 
 			for {
@@ -63,7 +61,7 @@ func (c *Client) Stop() {
 	log.Println("Attempting to stop service")
 	c.cancelCtxFunc()
 
-	log.Println("Issued cancellation signal to providers")
+	log.Println("Issued STOP signal to providers")
 
 	startShutdownTime := time.Now()
 
@@ -99,4 +97,5 @@ func (c *Client) Stop() {
 func (c *Client) RegisterProvider(p base.Provider) {
 	// todo: stop providers being registered twice reflect type/ name maybe?
 	c.providers = append(c.providers, p)
+	p.Setup()
 }
