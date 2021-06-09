@@ -3,8 +3,9 @@ package client
 import (
 	"context"
 	"fmt"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"pluto/pkgs/providers/base"
+	"reflect"
 	"sync"
 	"time"
 )
@@ -29,7 +30,7 @@ func New(name string) *Client {
 }
 
 func (c *Client) Start(blocking bool) {
-	log.Println(fmt.Sprintf("Starting the %s service", c.name))
+	log.Info(fmt.Sprintf("Starting the %s service", c.name))
 
 	ctx, cancel := context.WithCancel(context.Background())
 	c.cancelCtxFunc = cancel // assign for later use
@@ -58,24 +59,24 @@ func (c *Client) Start(blocking bool) {
 }
 
 func (c *Client) Stop() {
-	log.Println("Attempting to stop service")
+	log.Info("Attempting to stop service")
 	c.cancelCtxFunc()
 
-	log.Println("Issued STOP signal to providers")
+	log.Debug("Issued STOP signal to providers")
 
 	startShutdownTime := time.Now()
 
 	// check if all providers are finished
 	for {
 		if time.Now().Sub(startShutdownTime) > c.maxShutdownDuration {
-			log.Println("Some providers took longer to shutdown than the maxShutdownDuration")
+			log.Info("Some providers took longer to shutdown than the maxShutdownDuration")
 			break
 		}
 
 		// check if providers are ready to shut down every second
 		secsRemaining := int((c.maxShutdownDuration - time.Now().Sub(startShutdownTime)).Seconds())
 
-		log.Println(fmt.Sprintf("Waiting for providers to shutdown (%ds remaining before force quitting)", secsRemaining))
+		log.Debug(fmt.Sprintf("Waiting for providers to shutdown (%ds remaining before force quitting)", secsRemaining))
 		time.Sleep(c.isFinishedSleepDuration)
 
 		providerStillRunning := false
@@ -91,11 +92,12 @@ func (c *Client) Stop() {
 		}
 	}
 
-	log.Println("Shutdown service complete")
+	log.Info("Shutdown service complete")
 }
 
 func (c *Client) RegisterProvider(p base.Provider) {
 	// todo: stop providers being registered twice reflect type/ name maybe?
+	log.Info(fmt.Sprintf("Registering %s", reflect.TypeOf(p)))
 	c.providers = append(c.providers, p)
 	p.Setup()
 }

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+option go_package = "./test";
+
+message GetUserRequest {
+
+}
+
+message GetUserResponse {
+  int32 id = 1;
+}
+
+service users {
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+}
