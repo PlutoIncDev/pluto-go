@@ -3,7 +3,7 @@ package middlewares
 import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
-	"pluto/pkgs/providers/http"
+	"github.com/plutoincdev/pluto-go/pkgs/providers/http"
 	"time"
 )
 
